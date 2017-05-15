@@ -1,0 +1,120 @@
+
+<CustomPopup>:
+    size_hint: .5, .5
+    #size: 10, 10
+    auto_dismiss: False
+    title: "Touch to exit"
+    #source: 'data/SpIn1.jpeg'
+    BoxLayout:
+        Button:
+            text: "close"
+            on_press: root.dismiss()
+            Image:
+                size: self.width, self.height
+                source: 'data/SpIn1.jpeg'
+                #y: self.parent.y + self.parent.height - 290
+                y: self.parent.y
+                x: self.parent.x
+                size: self.parent.size
+                stretch: True
+
+<MiezIcon>:
+    #size: 30, 30
+    canvas:
+        Ellipse:
+            size: self.center_x * 0.7, self.center_y * 0.9
+            pos: self.center_x * 0.5, self.center_y * 0.8
+            source: 'data/Kittler.png'
+
+
+<MiezBall>:
+    size: 70, 70
+    canvas:
+        Color:
+            rgb: (1, 0, 0.5)
+        Ellipse:
+            pos: self.pos
+            #pos: self.center_x * 0.5, self.center_y * 0.8
+            #size: self.size
+            #size: 50,50
+            #color: 0, 1, 0, 0.4
+
+
+
+##################################################
+#MiezBoxLayout:
+
+<MiezBox>:
+    orientation: "vertical"
+    padding: 2
+    spacing: 0
+    ball: ball_id
+    icon: icon_id
+
+
+    BoxLayout:
+        id: wall_id
+        orientation: "horizontal"
+
+        canvas.before:
+            Rectangle:
+                pos: self.pos
+                size: self.size
+                source: 'data/Wand3.jpg'
+
+            Rectangle:
+                size: self.center_x * 0.3, self.center_y*0.5
+                pos: self.center_x * 1.3, self.center_y * 0.71
+                source: 'data/Tuer2.png'
+                on_press: root.open_popup()
+
+
+    BoxLayout:
+        id: boden_id
+        orientation: "horizontal"
+        canvas.before:
+            Rectangle:
+                pos: self.pos
+                size: self.size
+                source: 'data/Boden1.jpg'
+
+            #Ellipse:
+            #    size: self.center_x * 0.4, self.center_y * 0.9
+            #    #pos: self.parent.center
+            #    pos: self.center_x * 0.5, self.center_y * 0.8
+                #size:self.size
+            #    source: 'data/Kittler.png'
+            #    id: mieze_id
+
+        MiezIcon:
+            id: icon_id
+            #source: 'data/Kittler.png'
+            center: self.parent.center
+
+
+        MiezBall:
+            id: ball_id
+            center: self.parent.center
+
+
+        #Mieze:
+        #    center: self.parent.center
+
+
+    BoxLayout:
+        orientation: "horizontal"
+        size_hint_y: .20
+
+        Spinner:
+            text: "Cat"
+            values: ["Minky", "e626", "Mizi", "Kittler", "Pinky", "Buttler"]
+            id: spinnerCat_id
+            on_text: root.spinner_clicked(spinnerCat_id.text)
+
+        Spinner:
+            text: "Wall"
+            values: ["Space", "Forest", "Flowers", "Bricks"]
+            id: spinnerWall_id
+            on_text: root.spinner_clicked(spinnerWall_id.text)
+
+

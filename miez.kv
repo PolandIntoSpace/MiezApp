@@ -51,11 +51,10 @@
     ball: ball_id
     icon: icon_id
 
-
     BoxLayout:
         id: wall_id
-        orientation: "horizontal"
 
+        orientation: "horizontal"
         canvas.before:
             Rectangle:
                 pos: self.pos
@@ -77,14 +76,6 @@
                 pos: self.pos
                 size: self.size
                 source: 'data/Boden1.jpg'
-
-            #Ellipse:
-            #    size: self.center_x * 0.4, self.center_y * 0.9
-            #    #pos: self.parent.center
-            #    pos: self.center_x * 0.5, self.center_y * 0.8
-                #size:self.size
-            #    source: 'data/Kittler.png'
-            #    id: mieze_id
 
         MiezIcon:
             id: icon_id
@@ -111,10 +102,23 @@
             id: spinnerCat_id
             on_text: root.spinner_clicked(spinnerCat_id.text)
 
-        Spinner:
-            text: "Wall"
-            values: ["Space", "Forest", "Flowers", "Bricks"]
-            id: spinnerWall_id
-            on_text: root.spinner_clicked(spinnerWall_id.text)
+#        Spinner:
+#            text: "Wall"
+#            values: ["Space", "Forest", "Flowers", "Bricks"]
+#            id: spinnerWall_id
+#            on_text: root.spinner_clicked(spinnerWall_id.text)
 
+        Button:
+            text: "Go to sensors"
+            on_press:
+                root.manager.transition.direction = "left"
+                root.manager.transition.duration = 1
+                root.manager.current = 'sensor_screen'
 
+<SensorBox>:
+    BoxLayout:
+        Button:
+            text: "Go back to MiezApp"
+            on_press:
+                root.manager.transition.direction = "right"
+                root.manager.current = 'miez_screen'

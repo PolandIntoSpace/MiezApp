@@ -21,7 +21,7 @@
 <MiezIcon>:
     #size: 30, 30
     canvas:
-        Ellipse:
+        Rectangle:
             size: self.center_x * 0.7, self.center_y * 0.9
             pos: self.center_x * 0.5, self.center_y * 0.8
             source: 'data/Kittler.png'
@@ -45,7 +45,8 @@
 #MiezBoxLayout:
 
 <MiezBox>:
-    orientation: "vertical"
+    #orientation: "vertical"
+    orientation: 'horizontal'
     padding: 2
     spacing: 0
     ball: ball_id
@@ -53,7 +54,6 @@
 
     BoxLayout:
         id: wall_id
-
         orientation: "horizontal"
         canvas.before:
             Rectangle:
@@ -62,15 +62,15 @@
                 source: 'data/Wand3.jpg'
 
             Rectangle:
-                size: self.center_x * 0.3, self.center_y*0.5
-                pos: self.center_x * 1.3, self.center_y * 0.71
+                size: self.center_x * 0.3, self.center_y * 0.7
+                pos: self.center_x, self.center_y
                 source: 'data/Tuer2.png'
                 on_press: root.open_popup()
-
 
     BoxLayout:
         id: boden_id
         orientation: "horizontal"
+        size_hint_y: .50
         canvas.before:
             Rectangle:
                 pos: self.pos
@@ -82,31 +82,20 @@
             #source: 'data/Kittler.png'
             center: self.parent.center
 
-
         MiezBall:
             id: ball_id
             center: self.parent.center
 
 
-        #Mieze:
-        #    center: self.parent.center
-
-
     BoxLayout:
         orientation: "horizontal"
-        size_hint_y: .20
+        size_hint_y: .15
 
         Spinner:
             text: "Cat"
             values: ["Minky", "e626", "Mizi", "Kittler", "Pinky", "Buttler"]
             id: spinnerCat_id
             on_text: root.spinner_clicked(spinnerCat_id.text)
-
-#        Spinner:
-#            text: "Wall"
-#            values: ["Space", "Forest", "Flowers", "Bricks"]
-#            id: spinnerWall_id
-#            on_text: root.spinner_clicked(spinnerWall_id.text)
 
         Button:
             text: "Go to sensors"
@@ -117,6 +106,8 @@
 
 <SensorBox>:
     BoxLayout:
+        orientation: 'horizontal'
+
         Button:
             text: "Go back to MiezApp"
             on_press:

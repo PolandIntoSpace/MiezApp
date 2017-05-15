@@ -11,8 +11,8 @@ from kivy.vector import Vector
 from kivy.properties import NumericProperty, ReferenceListProperty, \
     ObjectProperty
 from kivy.clock import Clock
-from plyer import vibrator
 from random import randint
+from plyer import vibrator
 
 count_door = 0
 count_cat = 0
@@ -22,12 +22,11 @@ count_cat = 0
 class CustomPopup(Popup):
     pass
 
-
-class MiezIcon(Widget):
+class SensorBox(Screen):
     pass
 
 
-class SensorBox(Screen):
+class MiezIcon(Widget):
     pass
 
 
@@ -97,7 +96,7 @@ class MiezBox(Screen):
         # print(touch): <MouseMotionEvent spos=(0.654375, 0.9292035398230089) pos=(1047.0, 735.0)>
         # -> pos absolute position (like pixel), spos is the position on a scale 0-1
         elif (touch.spos[0] > 0.6543 and touch.spos[0] < 0.7925) and (
-                touch.spos[1] > 0.5550 and touch.spos[1] < 0.9292):
+                        touch.spos[1] > 0.5550 and touch.spos[1] < 0.9292):
             if count_door is 4:
                 self.open_popup()
                 count_door = 0
@@ -105,7 +104,7 @@ class MiezBox(Screen):
                 count_door += 1
 
         elif (touch.spos[0] > 0.1630 and touch.spos[0] < 0.2550) and (
-                touch.spos[1] < 0.5200 and touch.spos[1] > 0.2830):
+                        touch.spos[1] < 0.5200 and touch.spos[1] > 0.2830):
             if count_cat is 2:
                 vibrator.pattern([0.1, 0.1, 0.2])
                 count_cat = 0
@@ -124,19 +123,20 @@ class MiezBox(Screen):
         # self.canvas.source = catname
 
 
-
-
 class MiezApp(App):
     def build(self):
         game = MiezBox()
         # game.serve_ball()
-        #Clock.schedule_interval(game.update, 1.0 / 60.0)
+        # Clock.schedule_interval(game.update, 1.0 / 60.0)
         # Window.clearcolor = (1,1,1,1)
         Clock.schedule_interval(game.update, 1.0 / 60.0)
         screen_manager = ScreenManager()
         screen_manager.add_widget(MiezBox(name='miez_screen'))
         screen_manager.add_widget(SensorBox(name='sensor_screen'))
         return screen_manager
+
+    def on_pause(self):
+        return True
 
 
 if __name__ == '__main__':

@@ -92,13 +92,17 @@
         size_hint_y: .15
 
         Spinner:
-            text: "Cat"
-            values: ["Minky", "e626", "Mizi", "Kittler", "Pinky", "Buttler"]
+            text: "Sensor"
+            values: ["Minky", "e626", "Mizi"]
             id: spinnerCat_id
             on_text: root.spinner_clicked(spinnerCat_id.text)
 
         Button:
-            text: "Go to sensors"
+            text: 'Open settings'
+            on_release: app.open_settings()
+
+        Button:
+            text: "Go to next screen"
             on_press:
                 root.manager.transition.direction = "left"
                 root.manager.transition.duration = 1
@@ -106,9 +110,18 @@
 
 <SensorBox>:
     BoxLayout:
-        orientation: 'horizontal'
+        orientation: 'vertical'
+
+        Label:
+            text:
+                ('[b]Hier[/b] [color=ff0099]könnte[/color]\n'
+                '[color=ff0099]Ihre[/color] [b]Werbung[/b]\n'
+                '[b]stehen[/b] [color=ff0099]![/color]')
+            markup: True
+            font_size: '64pt'
 
         Button:
+            size_hint_y: .15
             text: "Go back to MiezApp"
             on_press:
                 root.manager.transition.direction = "right"

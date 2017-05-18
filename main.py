@@ -77,27 +77,38 @@ class MiezBox(Screen):
         self.ball.move()
 
         # bounce off top and bottom, the multilpication is a bad workaround
-        if (self.ball.y < 0) or (self.ball.top > self.height * 1.2):  # *1.2
+        print(self.ball.x)
+        print(self.ball.y)
+        if (self.ball.y < 0) or (self.ball.top - 200 > self.height):  # *1.2
+            #print('self.ball.top: %d\n', self.ball.top)
+            #print('self.height: %d\n', self.height)
+            #print('self.ball.y: \n', self.ball.y)
             self.ball.velocity_y *= -1
+            print('bounced top or bottom')
 
         # bounce off left and right
-        if (self.ball.x < 0) or (self.ball.right > self.width * 1.3):  # *1.4
+        if (self.ball.x + 200 < 0) or (self.ball.right - 200 > self.width):  # *1.4
             self.ball.velocity_x *= -1
+            print('bounced left or right')
 
     def on_touch_up(self, touch):
-        print touch
+        #print touch
         global count_door
         global count_cat
 
         # size ball is 70
-        if abs(touch.pos[0] - self.ball.x) < 80 and abs(touch.pos[1] - self.ball.y) < 80:
+        print(abs(touch.pos[0] - self.ball.x))
+        print(abs(touch.pos[1] - self.ball.y))
+        print(' ')
+        if abs(touch.pos[0] - self.ball.x) < 55 and abs(touch.pos[1] - self.ball.y) < 220:
+            print('worked')
             self.serve_ball()
 
         # koordinates of the door are x: 0.6543, 0.7925 and y: 0.9292, 0.5550
         # print(touch): <MouseMotionEvent spos=(0.654375, 0.9292035398230089) pos=(1047.0, 735.0)>
         # -> pos absolute position (like pixel), spos is the position on a scale 0-1
-        elif (touch.spos[0] > 0.6543 and touch.spos[0] < 0.7925) and (
-                        touch.spos[1] > 0.5550 and touch.spos[1] < 0.9292):
+        elif (touch.spos[0] > 0.505 and touch.spos[0] < 0.643) and (
+                        touch.spos[1] > 0.503 and touch.spos[1] < 0.847):
             if count_door is 4:
                 self.open_popup()
                 count_door = 0
@@ -115,13 +126,6 @@ class MiezBox(Screen):
     # For Spinner
     def spinner_clicked(self, value):
         pass
-        # print("Spinner Value" + value)
-        # Values: "Minky", "e626", "Mizi", "Kittler", "Pinky", "Buttler"
-        # if value is "Minky":
-        # self.ids.mieze_id.source = "Minky.png"
-
-        # def change_catPic(self, catname):
-        # self.canvas.source = catname
 
 
 class MiezApp(App):

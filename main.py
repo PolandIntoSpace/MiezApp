@@ -62,17 +62,14 @@ class MiezBox(BoxLayout):
         the_popup = DoorPopup()
         the_popup.open()
 
-    def open_battery_popup(self, *args):
-        print('open PopUp')
-        the_popup = BatteryPopup()
-        the_popup.open()
-        self.lbl1.text = str(battery.status['isCharging'])
-        self.lbl2.text = str(battery.status['percentage']) + "%"
-
-    def get_status(self, *args):
+    def get_battery_status(self, *args):
+        try:
+            msg = "isCharching: " + str(battery.status['isCharging']) + "   Percentage: " + str(battery.status['percentage']) + "%"
+        except ValueError:
+            msg = "Sorry, couldn't get battery status."
         pop = Popup(title='Battery status',
-                    content=Label(text=str(battery.status['isCharging']) + str(battery.status['percentage']) + "%"),
-                    size_hint=[.5, .2])
+            content=Label(text=msg),
+            size_hint=[.5, .2])
         pop.open()
 
     def serve_ball(self):

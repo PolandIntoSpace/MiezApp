@@ -1,10 +1,8 @@
 
 <DoorPopup>:
     size_hint: .5, .5
-    #size: 10, 10
     auto_dismiss: False
     title: "Touch to exit"
-    #source: 'data/SpIn1.jpeg'
     BoxLayout:
         Button:
             text: "close"
@@ -12,14 +10,12 @@
             Image:
                 size: self.width, self.height
                 source: 'data/SpIn1.jpeg'
-                #y: self.parent.y + self.parent.height - 290
                 y: self.parent.y
                 x: self.parent.x
                 size: self.parent.size
                 stretch: True
 
 <MiezIcon>:
-    #size: 30, 30
     canvas:
         Ellipse:
             size: self.center_x * 0.7, self.center_y * 0.9
@@ -28,22 +24,15 @@
 
 
 <MiezBall>:
-    size: 70, 70
+    size: 140, 140
     canvas:
         Color:
             rgb: (1, 0, 0.5)
         Ellipse:
             pos: self.pos
-            #pos: self.center_x * 0.5, self.center_y * 0.8
-            #size: self.size
-            #size: 50,50
-            #color: 0, 1, 0, 0.4
-
 
 
 ##################################################
-#MiezBoxLayout:
-
 <MiezBox>:
     orientation: "vertical"
     padding: 2
@@ -98,7 +87,7 @@
 
         Button:
             text: 'Battery Status'
-            on_press: root.get_status()
+            on_press: root.get_battery_status()
 
 
         Button:

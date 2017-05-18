@@ -6,18 +6,24 @@ from kivy.uix.widget import Widget
 from kivy.uix.boxlayout import BoxLayout
 from kivy.core.window import Window
 from kivy.uix.popup import Popup
+from kivy.uix.label import Label
 from kivy.vector import Vector
 from kivy.properties import NumericProperty, ReferenceListProperty,\
     ObjectProperty
 from kivy.clock import Clock
-from plyer import vibrator
 from random import randint
+
+from plyer import battery
+from plyer import vibrator
 
 count_door = 0
 count_cat = 0
 
 # PopIp when door clicked
-class CustomPopup(Popup):
+class DoorPopup(Popup):
+    pass
+
+class BatteryPopup(Popup):
     pass
 
 class MiezIcon(Widget):
@@ -46,13 +52,28 @@ class MiezBox(BoxLayout):
     # manage ball
     ball = ObjectProperty(None)
     icon = ObjectProperty(None)
+    lbl1 = ObjectProperty()
+    lbl2 = ObjectProperty()
 
 
     #Opens Popup when called
-    def open_popup(self):
+    def open_door_popup(self):
         print('open PopUp')
-        the_popup = CustomPopup()
+        the_popup = DoorPopup()
         the_popup.open()
+
+    def open_battery_popup(self, *args):
+        print('open PopUp')
+        the_popup = BatteryPopup()
+        the_popup.open()
+        self.lbl1.text = str(battery.status['isCharging'])
+        self.lbl2.text = str(battery.status['percentage']) + "%"
+
+    def get_status(self, *args):
+        pop = Popup(title='Battery status',
+                    content=Label(text=str(battery.status['isCharging']) + str(battery.status['percentage']) + "%"),
+                    size_hint=[.5, .2])
+        pop.open()
 
     def serve_ball(self):
         #self.ball.center = self.center
@@ -72,11 +93,11 @@ class MiezBox(BoxLayout):
         self.ball.move()
 
         # bounce off top and bottom, the multilpication is a bad workaround
-        if (self.ball.y < 0) or (self.ball.top > self.height*1.2): #*1.2
+        if (self.ball.y < 0) or (self.ball.top > self.height*1.3): #*1.2
             self.ball.velocity_y *= -1
 
         # bounce off left and right
-        if (self.ball.x < 0) or (self.ball.right > self.width*1.3): #*1.4
+        if (self.ball.x < 0) or (self.ball.right > self.width*1.4): #*1.4
             self.ball.velocity_x *= -1
 
 
@@ -94,7 +115,7 @@ class MiezBox(BoxLayout):
         # -> pos absolute position (like pixel), spos is the position on a scale 0-1
         elif (touch.spos[0] > 0.6543 and touch.spos[0] < 0.7925) and (touch.spos[1] > 0.5550 and touch.spos[1] < 0.9292):
             if count_door is 4:
-                self.open_popup()
+                self.open_door_popup()
                 count_door = 0
             else:
                 count_door+=1
@@ -109,24 +130,13 @@ class MiezBox(BoxLayout):
     # For Spinner
     def spinner_clicked(self, value):
         pass
-        #print("Spinner Value" + value)
-        #Values: "Minky", "e626", "Mizi", "Kittler", "Pinky", "Buttler"
-        #if value is "Minky":
-            #self.ids.mieze_id.source = "Minky.png"
-
-    #def change_catPic(self, catname):
-        #self.canvas.source = catname
 
 class MiezApp(App):
     def build(self):
         game = MiezBox()
-        #game.serve_ball()
         Clock.schedule_interval(game.update, 1.0 / 60.0)
-        #Window.clearcolor = (1,1,1,1)
         return game
 
 if __name__ == '__main__':
     MiezApp().run()
 
-#miez_app = MiezApp()
-#miez_app.run()

@@ -4,7 +4,6 @@ kivy.require("1.9.0")
 from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.uix.boxlayout import BoxLayout
-from kivy.core.window import Window
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from kivy.vector import Vector
@@ -13,13 +12,19 @@ from kivy.properties import NumericProperty, ReferenceListProperty,\
 from kivy.clock import Clock
 from random import randint
 
-from plyer import battery
-from plyer import vibrator
+bsensors = None # Boolean ob plyer erkannt wird (iOS)
+try:
+    from plyer import battery
+    from plyer import vibrator
+    bsensors = True
+except:
+    bsensors = False
 
+# Zaehle mit wie oft Objekt angetippt wurde
 count_door = 0
 count_cat = 0
 
-# PopIp when door clicked
+# Erzeuge die Objekte
 class DoorPopup(Popup):
     pass
 
@@ -30,9 +35,10 @@ class MiezIcon(Widget):
     pass
 
 
-# red Ball as toy
+# Erzeuge den roten Ball mit den Eigenschaften seine Position zu ändern
 class MiezBall(Widget):
 
+    # Folgender Code basiert auf dem offiziellem Pong-Beispiel:
     # velocity of the ball on x and y axis
     velocity_x = NumericProperty(0)
     velocity_y = NumericProperty(0)
@@ -46,40 +52,41 @@ class MiezBall(Widget):
     def move(self):
         self.pos = Vector(*self.velocity) + self.pos
 
-# Whole widget
+# Erzeuge das ganze Widget
 class MiezBox(BoxLayout):
 
-    # manage ball
+    # Verwalte den Ball
     ball = ObjectProperty(None)
     icon = ObjectProperty(None)
     lbl1 = ObjectProperty()
     lbl2 = ObjectProperty()
 
 
-    #Opens Popup when called
+    # Öffne das PopUp wenn an der Tür angeklopft wird
     def open_door_popup(self):
         print('open PopUp')
         the_popup = DoorPopup()
         the_popup.open()
 
-    def open_battery_popup(self, *args):
-        print('open PopUp')
-        the_popup = BatteryPopup()
-        the_popup.open()
-        self.lbl1.text = str(battery.status['isCharging'])
-        self.lbl2.text = str(battery.status['percentage']) + "%"
-
-    def get_status(self, *args):
+    # Öffne ein Fenster mit dem Status der Batterie
+    def get_battery_status(self, *args):
+        if bsensors:
+            try:
+                msg = "isCharching: " + str(battery.status['isCharging']) + "   Percentage: " + str(battery.status['percentage']) + "%"
+            except ValueError:
+                msg = "Sorry, couldn't get battery status."
+        else:
+            msg = "Sorry, can't access sensors by code (iOS)."
         pop = Popup(title='Battery status',
-                    content=Label(text=str(battery.status['isCharging']) + str(battery.status['percentage']) + "%"),
-                    size_hint=[.5, .2])
+            content=Label(text=msg),
+            size_hint=[.5, .2])
         pop.open()
 
+    # Setze den Ball
     def serve_ball(self):
-        #self.ball.center = self.center
         self.ball.velocity = Vector(10, 0).rotate(randint(0, 360))
-        #self.ball.velocity = Vector(8, 0).rotate(20)
 
+    # Update für den Ball (z.B. Reduktion der Geschwindigkeit)
     def update(self, dt):
         speed_reduce = [0.05, 0.05]
 
@@ -92,27 +99,28 @@ class MiezBox(BoxLayout):
         self.ball.velocity = Vector(*self.ball.velocity) - speed_reduce
         self.ball.move()
 
-        # bounce off top and bottom, the multilpication is a bad workaround
+        # Ball soll von oben und unten abprallen, schlechter Workaround mit der Multiplikation
         if (self.ball.y < 0) or (self.ball.top > self.height*1.3): #*1.2
             self.ball.velocity_y *= -1
 
-        # bounce off left and right
+        # Ball soll von rechts und links abprallen, schlechter Workaround mit der Multiplikation
         if (self.ball.x < 0) or (self.ball.right > self.width*1.4): #*1.4
             self.ball.velocity_x *= -1
 
 
+    # Bei Berührung des Bildschirms:
     def on_touch_up(self, touch):
         print touch
         global count_door
         global count_cat
 
-        #size ball is 70
+        # Falls der Ball berührt wurde
         if abs(touch.pos[0] - self.ball.x) < 80 and abs(touch.pos[1] - self.ball.y) < 80:
             self.serve_ball()
 
-        # koordinates of the door are x: 0.6543, 0.7925 and y: 0.9292, 0.5550
+        # Falls die Tür berührt wurde zähle bis 5 Berührungen ("Anklopfen")
         # print(touch): <MouseMotionEvent spos=(0.654375, 0.9292035398230089) pos=(1047.0, 735.0)>
-        # -> pos absolute position (like pixel), spos is the position on a scale 0-1
+        # -> pos ist die absolute Position (wie Pixel), spos ist die Position auf einer Skala  0-1
         elif (touch.spos[0] > 0.6543 and touch.spos[0] < 0.7925) and (touch.spos[1] > 0.5550 and touch.spos[1] < 0.9292):
             if count_door is 4:
                 self.open_door_popup()
@@ -120,17 +128,21 @@ class MiezBox(BoxLayout):
             else:
                 count_door+=1
 
+        # Falls die Mieze berührt wurde warte 3 Berührungen ab um zu vibrieren
         elif (touch.spos[0] > 0.1630 and touch.spos[0] < 0.2550) and (touch.spos[1] < 0.5200 and touch.spos[1] > 0.2830):
             if count_cat is 2:
-		vibrator.pattern([0.1, 0.1, 0.2]) 
+                if bsensors:
+		            vibrator.vibrate(0.5)
                 count_cat = 0
             else:
                 count_cat+=1
 
-    # For Spinner
+    # Beim Spinner wird der Text selbst gesetzt, siehe kv-Datei
     def spinner_clicked(self, value):
         pass
 
+##################################################
+# Erstelle die App basierend auf dem Widget MiezBox
 class MiezApp(App):
     def build(self):
         game = MiezBox()

@@ -1,10 +1,13 @@
+# Diese kv gehört zur MiezApp und wurde für das Fach MobileAnwendungen geschrieben.
+# @author a.targowicki@hm.edu
 
+
+# Erstelle ein neues Fenster mit einem Button, auf welchem ein Bild liegt,
+# und einer Überschrift
 <DoorPopup>:
     size_hint: .5, .5
-    #size: 10, 10
     auto_dismiss: False
     title: "Touch to exit"
-    #source: 'data/SpIn1.jpeg'
     BoxLayout:
         Button:
             text: "close"
@@ -12,45 +15,39 @@
             Image:
                 size: self.width, self.height
                 source: 'data/SpIn1.jpeg'
-                #y: self.parent.y + self.parent.height - 290
                 y: self.parent.y
                 x: self.parent.x
                 size: self.parent.size
                 stretch: True
 
+# Erstelle das Katzenbild
 <MiezIcon>:
-    #size: 30, 30
     canvas:
         Ellipse:
             size: self.center_x * 0.7, self.center_y * 0.9
             pos: self.center_x * 0.5, self.center_y * 0.8
             source: 'data/Kittler.png'
 
-
+# Erstelle einen runden Kreis, "Ball", mit der Farbe rot
 <MiezBall>:
-    size: 70, 70
+    size: 140, 140
     canvas:
         Color:
             rgb: (1, 0, 0.5)
         Ellipse:
             pos: self.pos
-            #pos: self.center_x * 0.5, self.center_y * 0.8
-            #size: self.size
-            #size: 50,50
-            #color: 0, 1, 0, 0.4
-
 
 
 ##################################################
-#MiezBoxLayout:
-
+# Erstelle die gesamte Oberfläche
 <MiezBox>:
     orientation: "vertical"
-    padding: 2
-    spacing: 0
+    padding: 2 # Abstand zum "Rand"
+    spacing: 0 # Abstand zum nächsten Objekt
     ball: ball_id
     icon: icon_id
 
+    # Erstelle Wand mit Tür
     BoxLayout:
         id: wall_id
         orientation: "horizontal"
@@ -67,7 +64,7 @@
                 source: 'data/Tuer2.png'
                 on_press: root.open_door_popup()
 
-
+    # Erstelle Boden mit Katze und Ball
     BoxLayout:
         id: boden_id
         orientation: "horizontal"
@@ -86,6 +83,7 @@
             id: ball_id
             center: self.parent.center
 
+    # Erstelle eine Reihe mit Buttons
     BoxLayout:
         orientation: "horizontal"
         size_hint_y: .20
@@ -98,7 +96,7 @@
 
         Button:
             text: 'Battery Status'
-            on_press: root.get_status()
+            on_press: root.get_battery_status()
 
 
         Button:

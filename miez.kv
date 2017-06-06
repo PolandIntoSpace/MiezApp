@@ -1,4 +1,9 @@
+# Diese kv gehört zur MiezApp und wurde für das Fach MobileAnwendungen geschrieben.
+# @author a.targowicki@hm.edu
 
+
+# Erstelle ein neues Fenster mit einem Button, auf welchem ein Bild liegt,
+# und einer Überschrift
 <DoorPopup>:
     size_hint: .5, .5
     auto_dismiss: False
@@ -15,6 +20,7 @@
                 size: self.parent.size
                 stretch: True
 
+# Erstelle das Katzenbild
 <MiezIcon>:
     canvas:
         Ellipse:
@@ -22,7 +28,7 @@
             pos: self.center_x * 0.5, self.center_y * 0.8
             source: 'data/Kittler.png'
 
-
+# Erstelle einen runden Kreis, "Ball", mit der Farbe rot
 <MiezBall>:
     size: 140, 140
     canvas:
@@ -33,13 +39,15 @@
 
 
 ##################################################
+# Erstelle die gesamte Oberfläche
 <MiezBox>:
     orientation: "vertical"
-    padding: 2
-    spacing: 0
+    padding: 2 # Abstand zum "Rand"
+    spacing: 0 # Abstand zum nächsten Objekt
     ball: ball_id
     icon: icon_id
 
+    # Erstelle Wand mit Tür
     BoxLayout:
         id: wall_id
         orientation: "horizontal"
@@ -56,7 +64,7 @@
                 source: 'data/Tuer2.png'
                 on_press: root.open_door_popup()
 
-
+    # Erstelle Boden mit Katze und Ball
     BoxLayout:
         id: boden_id
         orientation: "horizontal"
@@ -75,6 +83,7 @@
             id: ball_id
             center: self.parent.center
 
+    # Erstelle eine Reihe mit Buttons
     BoxLayout:
         orientation: "horizontal"
         size_hint_y: .20

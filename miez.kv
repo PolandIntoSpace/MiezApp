@@ -1,9 +1,9 @@
-# Diese kv gehört zur MiezApp und wurde für das Fach MobileAnwendungen geschrieben.
+# Diese kv gehoert zur MiezApp und wurde für das Fach MobileAnwendungen geschrieben.
 # @author a.targowicki@hm.edu
 
 
 # Erstelle ein neues Fenster mit einem Button, auf welchem ein Bild liegt,
-# und einer Überschrift
+# und einer Ueberschrift
 <DoorPopup>:
     size_hint: .5, .5
     auto_dismiss: False
@@ -39,7 +39,7 @@
 
 
 ##################################################
-# Erstelle die gesamte Oberfläche
+# Erstelle die gesamte Oberflaeche
 <MiezBox>:
     orientation: "vertical"
     padding: 2 # Abstand zum "Rand"
@@ -47,7 +47,7 @@
     ball: ball_id
     icon: icon_id
 
-    # Erstelle Wand mit Tür
+    # Erstelle Wand mit Tuer
     BoxLayout:
         id: wall_id
         orientation: "horizontal"
@@ -62,7 +62,6 @@
                 size: self.center_x * 0.3, self.center_y*0.5
                 pos: self.center_x * 1.3, self.center_y * 0.71
                 source: 'data/Tuer2.png'
-                on_press: root.open_door_popup()
 
     # Erstelle Boden mit Katze und Ball
     BoxLayout:

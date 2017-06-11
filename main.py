@@ -35,10 +35,10 @@ class MiezIcon(Widget):
     pass
 
 
-# Erzeuge den roten Ball mit den Eigenschaften seine Position zu ändern
+# Erzeuge den roten Ball mit den Eigenschaften seine Position zu aendern
 class MiezBall(Widget):
 
-    # Folgender Code basiert auf dem offiziellem Pong-Beispiel:
+    # Folgender Code basiert auf dem offiziellem Pong-Beispiel von kivy:
     # velocity of the ball on x and y axis
     velocity_x = NumericProperty(0)
     velocity_y = NumericProperty(0)
@@ -58,17 +58,15 @@ class MiezBox(BoxLayout):
     # Verwalte den Ball
     ball = ObjectProperty(None)
     icon = ObjectProperty(None)
-    lbl1 = ObjectProperty()
-    lbl2 = ObjectProperty()
 
 
-    # Öffne das PopUp wenn an der Tür angeklopft wird
+    # Oeffne das PopUp wenn an der Tuer angeklopft wird
     def open_door_popup(self):
         print('open PopUp')
         the_popup = DoorPopup()
         the_popup.open()
 
-    # Öffne ein Fenster mit dem Status der Batterie
+    # Oeffne ein Fenster mit dem Status der Batterie
     def get_battery_status(self, *args):
         if bsensors:
             try:
@@ -86,7 +84,7 @@ class MiezBox(BoxLayout):
     def serve_ball(self):
         self.ball.velocity = Vector(10, 0).rotate(randint(0, 360))
 
-    # Update für den Ball (z.B. Reduktion der Geschwindigkeit)
+    # Update fuer den Ball (z.B. Reduktion der Geschwindigkeit)
     def update(self, dt):
         speed_reduce = [0.05, 0.05]
 
@@ -108,17 +106,17 @@ class MiezBox(BoxLayout):
             self.ball.velocity_x *= -1
 
 
-    # Bei Berührung des Bildschirms:
+    # Bei Beruehrung des Bildschirms:
     def on_touch_up(self, touch):
         print touch
         global count_door
         global count_cat
 
-        # Falls der Ball berührt wurde
+        # Falls der Ball beruehrt wurde
         if abs(touch.pos[0] - self.ball.x) < 80 and abs(touch.pos[1] - self.ball.y) < 80:
             self.serve_ball()
 
-        # Falls die Tür berührt wurde zähle bis 5 Berührungen ("Anklopfen")
+        # Falls die Tuer beruehrt wurde zaehle bis 5 Beruehrungen ("Anklopfen")
         # print(touch): <MouseMotionEvent spos=(0.654375, 0.9292035398230089) pos=(1047.0, 735.0)>
         # -> pos ist die absolute Position (wie Pixel), spos ist die Position auf einer Skala  0-1
         elif (touch.spos[0] > 0.6543 and touch.spos[0] < 0.7925) and (touch.spos[1] > 0.5550 and touch.spos[1] < 0.9292):
@@ -128,7 +126,7 @@ class MiezBox(BoxLayout):
             else:
                 count_door+=1
 
-        # Falls die Mieze berührt wurde warte 3 Berührungen ab um zu vibrieren
+        # Falls die Mieze beruehrt wurde warte 3 Beruehrungen ab um zu vibrieren
         elif (touch.spos[0] > 0.1630 and touch.spos[0] < 0.2550) and (touch.spos[1] < 0.5200 and touch.spos[1] > 0.2830):
             if count_cat is 2:
                 if bsensors:
